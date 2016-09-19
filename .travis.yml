@@ -6,6 +6,15 @@ python:
   - '3.4'
   - '3.5'
 
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:canonical-foundations/ci-train-backports'
+    packages:
+      - python-lazr.restfulclient
+
 install:
-  - sudo apt-get install python-lazr.restfulclient
   - pip install -r requirements.txt
+
+script:
+  - echo "TEST"
