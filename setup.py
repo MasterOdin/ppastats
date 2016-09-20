@@ -1,17 +1,27 @@
 #!/usr/bin/env python
+"""
+Setup script for ppastats
+"""
 
+import os
+import shutil
+import ppastats
 from setuptools import setup
+
+if not os.path.exists('scripts'):
+    os.makedirs('scripts')
+shutil.copyfile('ppastats.py', 'scripts/ppastats')
 
 setup(
     name='ppastats',
-    version='0.1.0',
+    version=ppastats.__VERSION__,
     description='View download statistics for Personal Package Archives (PPA)',
     url='https://github.com/MasterOdin/ppastats',
     download_url='https://pypi.python.org/pypi/ppastats',
     license='Unlicense',
-    author='Matthew Peveler',
+    author=ppastats.__AUTHOR__,
     install_requires=open('requirements.txt').readlines(),
-    classifiers= [
+    classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: Public Domain",
@@ -20,5 +30,6 @@ setup(
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Topic :: Utilities"
-    ]
+    ],
+    scripts=['scripts/ppastats']
 )

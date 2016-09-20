@@ -1,4 +1,7 @@
 .DS_STORE
 .idea/
-.py[cod]
+*.py[cod]
 *.egg-info
+build/
+dist/
+scripts/
