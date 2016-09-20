@@ -1,48 +1,59 @@
+#!/usr/bin/env python
+
 from __future__ import print_function
-import sys, os
-import time, datetime
+from six import string_types
+import argparse
 from launchpadlib.launchpad import Launchpad
 
-# For reference: "ppa:ownername/archivename" or "https://launchpad.net/~ownername/+archive/archive-name"
-PPAOWNER = 'ondrej' # Name of the owner of the ppa you would like the stats for.
-PPANAME = 'php' # Name of the PPA you would like the stats for.
-ARCH = 'amd64' # System CPU architecture you would like the stats for. E.g. amd64, i386, etc.
 
-lp_login = Launchpad.login_anonymously('ppastats', 'edge', "~/.launchpadlib/cache/", version='devel') # Login into Launchpad Anoymously
-owner = lp_login.people[PPAOWNER] # PPA owner
-archive = owner.getPPAByName(name=PPANAME) # PPA name
+def parse_arguments():
+    parser = argparse.ArgumentParser(prog='ppastats',
+                                     description='Get statistics for personal package archives'
+                                                 '(PPA) for any Ubuntu release/architecture')
+    parser.add_argument('-r', '--release', nargs='+',
+                        help='Releases to get PPA for. This is the first word of the release, such'
+                             'as "trusty" or "vivid". Additionally, a version number can be given'
+                             '(14.04) and this will be translated to the proper release name.'
+                             'Defaults to trusty.', default='trusty')
+    parser.add_argument('-a', '--arch', nargs='+',
+                        help='Architecture to consider (amd64 or i386). Defaults to amd64.',
+                        default='amd64')
+    parser.add_argument('ppa', nargs='+', help='PPAs to get stats for. Should be in the format of '
+                                               '"owner:package" (ex: ondrej:php).')
 
-# Be sure to COMMENT OUT OR DELETE LINES NOT SUPPORTED BY THE PPA in question. For example if the PPA doesn't
-# have Precise (12.04) or i386 support than you wouldn't use that version.
+    args = parser.parse_args()
+    if isinstance(args.release, string_types):
+        args.release = [args.release]
+    if isinstance(args.arch, string_types):
+        args.arch = [args.arch]
+    return args.release, args.arch, args.ppa
 
-trusty_amd64 = 'https://api.launchpad.net/devel/ubuntu/' + 'trusty' + '/' + ARCH
 
-# Declare a desination in home folder for the log files based on date
-home = os.getenv("HOME") 
-dirname = "/logs/"+PPANAME+'/'
-year = time.strftime("%Y")+'/'
-month = time.strftime("%m")+'/'
-destination = home+dirname+year+month
+def get_stats(releases, archs, ppas):
+    lp_login = Launchpad.login_anonymously('ppastats', 'edge', "~/.launchpadlib/cache/",
+                                           version='devel')  # Login into Launchpad Anoymously
+    for ppa in ppas:
+        ppa = ppa.split("/")
+        ppa_owner = ppa[0]
+        ppa_name = ppa[1]
+        owner = lp_login.people[ppa_owner]  # PPA owner
+        archive = owner.getPPAByName(name=ppa_name)  # PPA name
+        for release in releases:
+            for arch in archs:
+                distro = 'https://api.launchpad.net/devel/ubuntu/' + release + '/' + arch
+                print('Download stats for ' + str(ppa_owner) + '/' + str(ppa_name) + ' PPA')
+                print('----------------------------------------------')
+                print('')
+                print(release + ' ' + arch + ' builds:')
+                print('---------------')
+                for individual_archive in archive.getPublishedBinaries(status='Published',
+                                                                       distro_arch_series=distro):
 
-print('Download stats for '+PPANAME+' PPA')
-print('----------------------------------------------')
-print('')
-print('Trusty builds:')
-print('---------------')
+                    # Write the package name, version and download count to the log file
+                    print(individual_archive.binary_package_name + "\t" +
+                          individual_archive.binary_package_version + "\t" + arch + "\t" +
+                          str(individual_archive.getDownloadCount()))
 
-# For loop to write the log files with download statistics from the PPA
-for individual_archive in archive.getPublishedBinaries(status='Published',distro_arch_series=trusty_amd64):
 
-    x = individual_archive.getDownloadCount() # Get download count
-    packagevers='~'.join(individual_archive.binary_package_version.split('~')[:-1]) # Get the package version
-    #sys.stdout = open(destination+time.strftime("%Y-%m-%d-%I:%M-")+packagevers+'.txt',
-    # 'w+') # Open the log file
-    # Print heading
-    if x > 0:
-        # Write the package name, version and download count to the log file
-        print(individual_archive.binary_package_name + "\t" +
-              individual_archive.binary_package_version + "\t" + ARCH + "\t" + str(
-            individual_archive.getDownloadCount()))
-    elif x < 1:
-        # If no stats are found print 'No data'
-        print('No data')
+if __name__ == "__main__":
+    get_stats(*parse_arguments())
