@@ -25,11 +25,11 @@ cache:
 install:
   - pip install pylint_runner
   - pip install -r requirements.txt
-  - if [[ ${TRAVIS_PYTHON_VERSION:0:3} != "2.6" ]]; then python setup.py install; fi
+  - python setup.py install
 
 script:
   - ppastats canonical-foundations/ci-train-backports
-  - pylint_runner
+  - if [[ ${TRAVIS_PYTHON_VERSION:0:3} != "2.6" ]]; then pylint_runner; fi
 
 deploy:
   provider: pypi
