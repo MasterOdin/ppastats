@@ -5,8 +5,8 @@ Setup script for ppastats
 
 import os
 import shutil
-import ppastats
 from setuptools import setup
+import ppastats
 
 if not os.path.exists('scripts'):
     os.makedirs('scripts')
