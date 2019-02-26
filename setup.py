@@ -7,15 +7,15 @@ import os
 from setuptools import setup
 import ppastats
 
-this_directory = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(this_directory, 'README.md'), 'rb') as open_file:
-    long_description = open_file.read().decode('utf-8')
+THIS_DIRECTORY = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(THIS_DIRECTORY, 'README.md'), 'rb') as open_file:
+    LONG_DESCRIPTION = open_file.read().decode('utf-8')
 
 setup(
     name='ppastats',
     version=ppastats.__VERSION__,
     description='View download statistics for Personal Package Archives (PPA)',
-    long_description=long_description,
+    long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     url='https://github.com/MasterOdin/ppastats',
     download_url='https://pypi.python.org/pypi/ppastats',
@@ -34,8 +34,8 @@ setup(
         "Programming Language :: Python :: 3.6"
         "Topic :: Utilities"
     ],
-    py_modules = ['ppastats'],
-    entry_points = {
+    py_modules=['ppastats'],
+    entry_points={
         'console_scripts': [
             'ppastats=ppastats:main'
         ]
