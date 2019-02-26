@@ -16,7 +16,7 @@ setup(
     version=ppastats.__VERSION__,
     description='View download statistics for Personal Package Archives (PPA)',
     long_description=long_description,
-    long_description_content_type='text/markdown'
+    long_description_content_type='text/markdown',
     url='https://github.com/MasterOdin/ppastats',
     download_url='https://pypi.python.org/pypi/ppastats',
     license='Unlicense',
