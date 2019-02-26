@@ -8,8 +8,8 @@ from setuptools import setup
 import ppastats
 
 this_directory = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as open_file:
-    long_description = open_file.read()
+with open(os.path.join(this_directory, 'README.md'), 'rb') as open_file:
+    long_description = open_file.read().decode('utf-8')
 
 setup(
     name='ppastats',
@@ -34,6 +34,7 @@ setup(
         "Programming Language :: Python :: 3.6"
         "Topic :: Utilities"
     ],
+    py_modules = ['ppastats'],
     entry_points = {
         'console_scripts': [
             'ppastats=ppastats:main'
