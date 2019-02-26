@@ -4,18 +4,19 @@ Setup script for ppastats
 """
 
 import os
-import shutil
 from setuptools import setup
 import ppastats
 
-if not os.path.exists('scripts'):
-    os.makedirs('scripts')
-shutil.copyfile('ppastats.py', 'scripts/ppastats')
+this_directory = os.path.abspath(path.dirname(__file__))
+with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as open_file:
+    long_description = open_file.read()
 
 setup(
     name='ppastats',
     version=ppastats.__VERSION__,
     description='View download statistics for Personal Package Archives (PPA)',
+    long_description=long_description,
+    long_description_content_type='text/markdown'
     url='https://github.com/MasterOdin/ppastats',
     download_url='https://pypi.python.org/pypi/ppastats',
     license='Unlicense',
@@ -33,5 +34,9 @@ setup(
         "Programming Language :: Python :: 3.6"
         "Topic :: Utilities"
     ],
-    scripts=['scripts/ppastats']
+    entry_points = {
+        'console_scripts': [
+            'ppastats=ppastats:main'
+        ]
+    }
 )
