@@ -8,7 +8,7 @@ from launchpadlib.launchpad import Launchpad
 from six import string_types
 
 __AUTHOR__ = "Matthew Peveler"
-__VERSION__ = "0.1.1"
+__VERSION__ = "0.2.0"
 
 
 def generate_parser():
