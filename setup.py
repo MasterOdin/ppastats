@@ -7,7 +7,7 @@ import os
 from setuptools import setup
 import ppastats
 
-this_directory = os.path.abspath(path.dirname(__file__))
+this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as open_file:
     long_description = open_file.read()
 
