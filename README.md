@@ -14,6 +14,6 @@ git clone https://github.com/MasterOdin/ppastats
 
 ## Usage
 ```
-ppastats ondrej:php
-ppastats -r trusty -a amd64 ondrej:php
+ppastats ondrej/php
+ppastats -r trusty -a amd64 ondrej/php
 ```
